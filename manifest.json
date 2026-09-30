@@ -1,11 +1,11 @@
 {
-  "name": "勾配 寸法計算",
-  "short_name": "勾配",
+  "name": "屋根タイトフレーム割付計算",
+  "short_name": "タイト割付",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#111113",
+  "theme_color": "#121214",
   "orientation": "any",
   "icons": [
     {
