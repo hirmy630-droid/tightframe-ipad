@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>屋根タイトフレーム割付計算</title>
     <!-- PWA マニフェストとアイコン -->
-    <link rel="manifest" href="./manifest.json?v=202610010400">
+    <link rel="manifest" href="./manifest.json?v=202610010500">
     <link rel="icon" type="image/png" href="./icon-192.png">
     <link rel="apple-touch-icon" href="./icon-180.png">
 
@@ -177,255 +177,349 @@
         const RoofProfileSVG = ({ size }) => {
             if (size === '600') {
                 return (
-                    <svg viewBox="0 0 720 290" className="w-full h-auto max-h-[210px] text-white drop-shadow-md select-none font-mono">
-                        {/* 芯線（一点鎖線） */}
-                        <g stroke="#71717a" strokeWidth="1.2" strokeDasharray="6,3,2,3">
-                            <line x1="85" y1="45" x2="85" y2="215" />
-                            <line x1="260" y1="45" x2="260" y2="215" />
-                            <line x1="435" y1="45" x2="435" y2="215" />
-                            <line x1="610" y1="45" x2="610" y2="215" />
+                    <svg viewBox="0 0 800 370" className="w-full h-auto max-h-[240px] text-white select-none font-mono">
+                        <defs>
+                            {/* 寸法線端部用矢印マーカー */}
+                            <marker id="arrow-start-600" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                <path d="M 8 1.5 L 0 5 L 8 8.5 z" fill="#e4e4e7" />
+                            </marker>
+                            <marker id="arrow-end-600" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                <path d="M 2 1.5 L 10 5 L 2 8.5 z" fill="#e4e4e7" />
+                            </marker>
+                        </defs>
+
+                        {/* 芯線（一点鎖線）：4箇所の山芯 */}
+                        <g stroke="#71717a" strokeWidth="1.2" strokeDasharray="8,4,2,4">
+                            <line x1="100" y1="50" x2="100" y2="230" />
+                            <line x1="280" y1="50" x2="280" y2="230" />
+                            <line x1="460" y1="50" x2="460" y2="230" />
+                            <line x1="640" y1="50" x2="640" y2="230" />
                         </g>
 
-                        {/* 上部 最上段寸法線 (600) */}
-                        <g stroke="#9ca3af" strokeWidth="1.2">
-                            <line x1="85" y1="26" x2="610" y2="26" />
-                            <line x1="85" y1="16" x2="85" y2="36" />
-                            <line x1="610" y1="16" x2="610" y2="36" />
+                        {/* 最上段寸法線: 600 */}
+                        <g stroke="#a1a1aa" strokeWidth="1.2">
+                            <line x1="100" y1="20" x2="100" y2="40" />
+                            <line x1="640" y1="20" x2="640" y2="40" />
+                            <line x1="100" y1="30" x2="640" y2="30" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
                         </g>
-                        <text x="347" y="20" fill="#f4f4f5" fontSize="22" fontWeight="800" textAnchor="middle">600</text>
+                        <rect x="345" y="16" width="50" height="24" rx="4" fill="#1c1c1e" />
+                        <text x="370" y="34" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">600</text>
 
-                        {/* 上部 ピッチ寸法線 (200, 200, 200) */}
-                        <g stroke="#9ca3af" strokeWidth="1.2">
-                            <line x1="85" y1="52" x2="260" y2="52" />
-                            <line x1="260" y1="52" x2="435" y2="435" />
-                            <line x1="435" y1="52" x2="610" y2="52" />
-                            <line x1="85" y1="44" x2="85" y2="60" />
-                            <line x1="260" y1="44" x2="260" y2="60" />
-                            <line x1="435" y1="44" x2="435" y2="60" />
-                            <line x1="610" y1="44" x2="610" y2="60" />
+                        {/* 2段目 ピッチ寸法線: 200, 200, 200 */}
+                        <g stroke="#a1a1aa" strokeWidth="1.2">
+                            <line x1="100" y1="58" x2="100" y2="76" />
+                            <line x1="280" y1="58" x2="280" y2="76" />
+                            <line x1="460" y1="58" x2="460" y2="76" />
+                            <line x1="640" y1="58" x2="640" y2="76" />
+                            <line x1="100" y1="67" x2="280" y2="67" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
+                            <line x1="280" y1="67" x2="460" y2="67" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
+                            <line x1="460" y1="67" x2="640" y2="67" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
                         </g>
-                        <text x="172" y="46" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">200</text>
-                        <text x="347" y="46" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">200</text>
-                        <text x="522" y="46" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">200</text>
+                        <rect x="165" y="55" width="50" height="22" rx="3" fill="#1c1c1e" />
+                        <text x="190" y="72" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">200</text>
+                        <rect x="345" y="55" width="50" height="22" rx="3" fill="#1c1c1e" />
+                        <text x="370" y="72" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">200</text>
+                        <rect x="525" y="55" width="50" height="22" rx="3" fill="#1c1c1e" />
+                        <text x="550" y="72" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">200</text>
 
-                        {/* 山頂幅寸法線 (33.5, 35, 35, 35) */}
-                        <g stroke="#9ca3af" strokeWidth="1">
-                            <line x1="69" y1="78" x2="101" y2="78" />
-                            <line x1="69" y1="64" x2="69" y2="104" />
-                            <line x1="101" y1="64" x2="101" y2="104" />
-
-                            <line x1="243" y1="78" x2="277" y2="78" />
-                            <line x1="243" y1="64" x2="243" y2="104" />
-                            <line x1="277" y1="64" x2="277" y2="104" />
-
-                            <line x1="418" y1="78" x2="452" y2="78" />
-                            <line x1="418" y1="64" x2="418" y2="104" />
-                            <line x1="452" y1="64" x2="452" y2="104" />
-
-                            <line x1="593" y1="78" x2="627" y2="78" />
-                            <line x1="593" y1="64" x2="593" y2="104" />
-                            <line x1="627" y1="64" x2="627" y2="104" />
+                        {/* 3段目 山頂幅寸法線: 33.5, 35, 35, 35 */}
+                        <g stroke="#a1a1aa" strokeWidth="1">
+                            {/* 山1 (33.5) */}
+                            <line x1="83.25" y1="95" x2="83.25" y2="175" />
+                            <line x1="116.75" y1="95" x2="116.75" y2="175" />
+                            <line x1="83.25" y1="125" x2="116.75" y2="125" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
+                            {/* 山2 (35) */}
+                            <line x1="262.5" y1="95" x2="262.5" y2="175" />
+                            <line x1="297.5" y1="95" x2="297.5" y2="175" />
+                            <line x1="262.5" y1="125" x2="297.5" y2="125" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
+                            {/* 山3 (35) */}
+                            <line x1="442.5" y1="95" x2="442.5" y2="175" />
+                            <line x1="477.5" y1="95" x2="477.5" y2="175" />
+                            <line x1="442.5" y1="125" x2="477.5" y2="125" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
+                            {/* 山4 (35) */}
+                            <line x1="622.5" y1="95" x2="622.5" y2="175" />
+                            <line x1="657.5" y1="95" x2="657.5" y2="175" />
+                            <line x1="622.5" y1="125" x2="657.5" y2="125" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
                         </g>
-                        <text x="85" y="73" fill="#e4e4e7" fontSize="18" fontWeight="bold" textAnchor="middle">33.5</text>
-                        <text x="260" y="73" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">35</text>
-                        <text x="435" y="73" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">35</text>
-                        <text x="610" y="73" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">35</text>
+                        <text x="100" y="117" fill="#f4f4f5" fontSize="16" fontWeight="bold" textAnchor="middle">33.5</text>
+                        <text x="280" y="117" fill="#f4f4f5" fontSize="16" fontWeight="bold" textAnchor="middle">35</text>
+                        <text x="460" y="117" fill="#f4f4f5" fontSize="16" fontWeight="bold" textAnchor="middle">35</text>
+                        <text x="640" y="117" fill="#f4f4f5" fontSize="16" fontWeight="bold" textAnchor="middle">35</text>
 
-                        {/* 折板屋根 断面ライン (白色 太線) */}
-                        <path d="M 52 122 L 69 104 L 101 104 L 155 186 L 190 186 L 243 104 L 277 104 L 330 186 L 365 186 L 418 104 L 452 104 L 505 186 L 540 186 L 593 104 L 627 104 L 644 122"
-                              fill="none" stroke="#ffffff" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
-
-                        {/* 端部小リブ (20) 寸法表記 */}
-                        <g stroke="#9ca3af" strokeWidth="1">
-                            <line x1="42" y1="114" x2="59" y2="96" />
-                            <line x1="637" y1="96" x2="654" y2="114" />
+                        {/* 端部 20 斜め寸法 */}
+                        {/* 左端 20 */}
+                        <g stroke="#a1a1aa" strokeWidth="1">
+                            <line x1="83.25" y1="175" x2="67" y2="155" />
+                            <line x1="69.25" y1="195" x2="53" y2="175" />
+                            <line x1="64" y1="160" x2="56" y2="170" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
                         </g>
-                        <text x="32" y="106" fill="#d4d4d8" fontSize="19" fontWeight="bold" textAnchor="end" transform="rotate(-48 32 106)">20</text>
-                        <text x="664" y="102" fill="#d4d4d8" fontSize="19" fontWeight="bold" textAnchor="start" transform="rotate(48 664 102)">20</text>
-
-                        {/* 高さ寸法 (88) */}
-                        <g stroke="#9ca3af" strokeWidth="1">
-                            <line x1="101" y1="104" x2="162" y2="104" />
-                            <line x1="162" y1="104" x2="162" y2="186" />
-                            <line x1="155" y1="186" x2="170" y2="186" />
+                        <text x="45" y="160" fill="#f4f4f5" fontSize="16" fontWeight="bold" textAnchor="end" transform="rotate(-50 45 160)">20</text>
+                        {/* 右端 20 */}
+                        <g stroke="#a1a1aa" strokeWidth="1">
+                            <line x1="657.5" y1="175" x2="673.75" y2="155" />
+                            <line x1="671.5" y1="195" x2="687.75" y2="175" />
+                            <line x1="677" y1="160" x2="685" y2="170" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
                         </g>
-                        <text x="162" y="149" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">88</text>
+                        <text x="702" y="152" fill="#f4f4f5" fontSize="16" fontWeight="bold" textAnchor="start" transform="rotate(50 702 152)">20</text>
 
-                        {/* 谷平部寸法線 (35, 35, 35) */}
-                        <g stroke="#9ca3af" strokeWidth="1">
-                            <line x1="155" y1="186" x2="155" y2="232" />
-                            <line x1="190" y1="186" x2="190" y2="232" />
-                            <line x1="155" y1="222" x2="190" y2="222" />
+                        {/* 600 折板屋根 断面ライン */}
+                        <path d="M 69.25 195 L 83.25 175 L 116.75 175 L 172.5 263 L 207.5 263 L 262.5 175 L 297.5 175 L 352.5 263 L 387.5 263 L 442.5 175 L 477.5 175 L 532.5 263 L 567.5 263 L 622.5 175 L 657.5 175 L 671.5 195"
+                              fill="none" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
 
-                            <line x1="330" y1="186" x2="330" y2="232" />
-                            <line x1="365" y1="186" x2="365" y2="232" />
-                            <line x1="330" y1="222" x2="365" y2="222" />
-
-                            <line x1="505" y1="186" x2="505" y2="232" />
-                            <line x1="540" y1="186" x2="540" y2="232" />
-                            <line x1="505" y1="222" x2="540" y2="222" />
+                        {/* 高さ寸法 (88) 引き出し線と垂直寸法 */}
+                        <g stroke="#a1a1aa" strokeWidth="1.2">
+                            <line x1="138" y1="175" x2="195" y2="175" />
+                            <line x1="195" y1="175" x2="195" y2="263" />
+                            <line x1="195" y1="263" x2="195" y2="263" />
                         </g>
-                        <text x="172" y="250" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">35</text>
-                        <text x="347" y="250" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">35</text>
-                        <text x="522" y="250" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">35</text>
+                        <rect x="180" y="206" width="30" height="20" rx="3" fill="#1c1c1e" />
+                        <text x="195" y="222" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">88</text>
+
+                        {/* 谷平部寸法線: 35, 35, 35 */}
+                        <g stroke="#a1a1aa" strokeWidth="1">
+                            {/* 谷1 */}
+                            <line x1="172.5" y1="263" x2="172.5" y2="330" />
+                            <line x1="207.5" y1="263" x2="207.5" y2="330" />
+                            <line x1="172.5" y1="315" x2="207.5" y2="315" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
+                            {/* 谷2 */}
+                            <line x1="352.5" y1="263" x2="352.5" y2="330" />
+                            <line x1="387.5" y1="263" x2="387.5" y2="330" />
+                            <line x1="352.5" y1="315" x2="387.5" y2="315" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
+                            {/* 谷3 */}
+                            <line x1="532.5" y1="263" x2="532.5" y2="330" />
+                            <line x1="567.5" y1="263" x2="567.5" y2="330" />
+                            <line x1="532.5" y1="315" x2="567.5" y2="315" markerStart="url(#arrow-start-600)" markerEnd="url(#arrow-end-600)" />
+                        </g>
+                        <text x="190" y="348" fill="#f4f4f5" fontSize="17" fontWeight="bold" textAnchor="middle">35</text>
+                        <text x="370" y="348" fill="#f4f4f5" fontSize="17" fontWeight="bold" textAnchor="middle">35</text>
+                        <text x="550" y="348" fill="#f4f4f5" fontSize="17" fontWeight="bold" textAnchor="middle">35</text>
                     </svg>
                 );
             } else if (size === '500') {
                 return (
-                    <svg viewBox="0 0 660 290" className="w-full h-auto max-h-[210px] text-white drop-shadow-md select-none font-mono">
-                        {/* 芯線（垂直線） */}
-                        <g stroke="#71717a" strokeWidth="1.2" strokeDasharray="6,3,2,3">
-                            <line x1="95" y1="50" x2="95" y2="235" />
-                            <line x1="330" y1="50" x2="330" y2="235" />
-                            <line x1="565" y1="50" x2="565" y2="235" />
+                    <svg viewBox="0 0 800 370" className="w-full h-auto max-h-[240px] text-white select-none font-mono">
+                        <defs>
+                            <marker id="arrow-start-500" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                <path d="M 8 1.5 L 0 5 L 8 8.5 z" fill="#e4e4e7" />
+                            </marker>
+                            <marker id="arrow-end-500" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                <path d="M 2 1.5 L 10 5 L 2 8.5 z" fill="#e4e4e7" />
+                            </marker>
+                        </defs>
+
+                        {/* 垂直芯線（実線）: 3箇所の山芯から下部ピッチへ貫通 */}
+                        <g stroke="#a1a1aa" strokeWidth="1">
+                            <line x1="150" y1="75" x2="150" y2="340" />
+                            <line x1="400" y1="75" x2="400" y2="340" />
+                            <line x1="650" y1="75" x2="650" y2="340" />
                         </g>
 
-                        {/* 上部寸法線 (500) */}
-                        <g stroke="#9ca3af" strokeWidth="1.2">
-                            <line x1="95" y1="26" x2="565" y2="26" />
-                            <line x1="95" y1="16" x2="95" y2="36" />
-                            <line x1="565" y1="16" x2="565" y2="36" />
+                        {/* 最上段寸法線: 500 */}
+                        <g stroke="#a1a1aa" strokeWidth="1.2">
+                            <line x1="150" y1="20" x2="150" y2="45" />
+                            <line x1="650" y1="20" x2="650" y2="45" />
+                            <line x1="150" y1="35" x2="650" y2="35" markerStart="url(#arrow-start-500)" markerEnd="url(#arrow-end-500)" />
                         </g>
-                        <text x="330" y="20" fill="#f4f4f5" fontSize="22" fontWeight="800" textAnchor="middle">500</text>
+                        <rect x="375" y="21" width="50" height="24" rx="4" fill="#1c1c1e" />
+                        <text x="400" y="39" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">500</text>
 
-                        {/* 各山頂幅寸法線 (38, 38, 36) */}
-                        <g stroke="#9ca3af" strokeWidth="1">
-                            <line x1="76" y1="50" x2="114" y2="50" />
-                            <line x1="76" y1="38" x2="76" y2="70" />
-                            <line x1="114" y1="38" x2="114" y2="70" />
+                        {/* 山頂幅寸法線 (38, 38, 36) - 外側挟み込み矢印スタイル */}
+                        <g stroke="#a1a1aa" strokeWidth="1">
+                            {/* 左山 (38) */}
+                            <line x1="131" y1="65" x2="131" y2="95" />
+                            <line x1="169" y1="65" x2="169" y2="95" />
+                            <line x1="100" y1="78" x2="131" y2="78" markerEnd="url(#arrow-end-500)" />
+                            <line x1="200" y1="78" x2="169" y2="78" markerEnd="url(#arrow-end-500)" />
 
-                            <line x1="311" y1="50" x2="349" y2="50" />
-                            <line x1="311" y1="38" x2="311" y2="70" />
-                            <line x1="349" y1="38" x2="349" y2="70" />
+                            {/* 中央山 (38) */}
+                            <line x1="381" y1="65" x2="381" y2="95" />
+                            <line x1="419" y1="65" x2="419" y2="95" />
+                            <line x1="350" y1="78" x2="381" y2="78" markerEnd="url(#arrow-end-500)" />
+                            <line x1="450" y1="78" x2="419" y2="78" markerEnd="url(#arrow-end-500)" />
 
-                            <line x1="547" y1="50" x2="583" y2="50" />
-                            <line x1="547" y1="38" x2="547" y2="70" />
-                            <line x1="583" y1="38" x2="583" y2="70" />
+                            {/* 右山 (36) */}
+                            <line x1="632" y1="65" x2="632" y2="95" />
+                            <line x1="668" y1="65" x2="668" y2="95" />
+                            <line x1="601" y1="78" x2="632" y2="78" markerEnd="url(#arrow-end-500)" />
+                            <line x1="699" y1="78" x2="668" y2="78" markerEnd="url(#arrow-end-500)" />
                         </g>
-                        <text x="95" y="44" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">38</text>
-                        <text x="330" y="44" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">38</text>
-                        <text x="565" y="44" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">36</text>
+                        <text x="150" y="73" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">38</text>
+                        <text x="400" y="73" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">38</text>
+                        <text x="650" y="73" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">36</text>
 
-                        {/* 折板本体 断面線 (白色 太線) */}
-                        <path d="M 64 96 L 64 80 L 76 68 L 114 68 L 195 186 L 233 186 L 311 68 L 349 68 L 430 186 L 468 186 L 547 68 L 583 68 L 593 84"
-                              fill="none" stroke="#ffffff" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
+                        {/* 500 折板本体 断面ライン */}
+                        <path d="M 120 128 L 120 110 L 131 95 L 169 95 L 256 245 L 294 245 L 381 95 L 419 95 L 506 245 L 544 245 L 632 95 L 668 95 L 678 115"
+                              fill="none" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+
+                        {/* 3R 3R アール表記（山頂内側・谷底内側） */}
+                        <g fill="#d4d4d8" fontSize="13" fontWeight="bold">
+                            {/* 左山 */}
+                            <text x="127" y="118">3R</text>
+                            <text x="153" y="118">3R</text>
+                            {/* 中央山 */}
+                            <text x="377" y="118">3R</text>
+                            <text x="403" y="118">3R</text>
+                            {/* 右山 */}
+                            <text x="628" y="118">3R</text>
+                            <text x="654" y="118">3R</text>
+
+                            {/* 谷1 */}
+                            <text x="254" y="235">3R</text>
+                            <text x="277" y="235">3R</text>
+                            {/* 谷2 */}
+                            <text x="504" y="235">3R</text>
+                            <text x="527" y="235">3R</text>
+                        </g>
 
                         {/* 高さ寸法 (150) */}
-                        <g stroke="#9ca3af" strokeWidth="1">
-                            <line x1="22" y1="68" x2="64" y2="68" />
-                            <line x1="22" y1="186" x2="195" y2="186" />
-                            <line x1="38" y1="68" x2="38" y2="186" />
-                            <line x1="30" y1="68" x2="46" y2="68" />
-                            <line x1="30" y1="186" x2="46" y2="186" />
+                        <g stroke="#a1a1aa" strokeWidth="1.2">
+                            <line x1="75" y1="95" x2="131" y2="95" />
+                            <line x1="75" y1="245" x2="256" y2="245" />
+                            <line x1="90" y1="95" x2="90" y2="245" markerStart="url(#arrow-start-500)" markerEnd="url(#arrow-end-500)" />
                         </g>
-                        <text x="14" y="133" fill="#f4f4f5" fontSize="21" fontWeight="bold" textAnchor="middle">150</text>
+                        <text x="75" y="176" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="end">150</text>
 
-                        {/* 谷平部寸法線 (38, 38) */}
-                        <g stroke="#9ca3af" strokeWidth="1">
-                            <line x1="195" y1="186" x2="195" y2="216" />
-                            <line x1="233" y1="186" x2="233" y2="216" />
-                            <line x1="195" y1="210" x2="233" y2="210" />
-
-                            <line x1="430" y1="186" x2="430" y2="216" />
-                            <line x1="468" y1="186" x2="468" y2="216" />
-                            <line x1="430" y1="210" x2="468" y2="210" />
+                        {/* 谷底平部寸法線 (38, 38) */}
+                        <g stroke="#a1a1aa" strokeWidth="1">
+                            {/* 谷1 */}
+                            <line x1="256" y1="245" x2="256" y2="275" />
+                            <line x1="294" y1="245" x2="294" y2="275" />
+                            <line x1="225" y1="262" x2="256" y2="262" markerEnd="url(#arrow-end-500)" />
+                            <line x1="325" y1="262" x2="294" y2="262" markerEnd="url(#arrow-end-500)" />
+                            {/* 谷2 */}
+                            <line x1="506" y1="245" x2="506" y2="275" />
+                            <line x1="544" y1="245" x2="544" y2="275" />
+                            <line x1="475" y1="262" x2="506" y2="262" markerEnd="url(#arrow-end-500)" />
+                            <line x1="575" y1="262" x2="544" y2="262" markerEnd="url(#arrow-end-500)" />
                         </g>
-                        <text x="214" y="206" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">38</text>
-                        <text x="449" y="206" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">38</text>
+                        <text x="275" y="268" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">38</text>
+                        <text x="525" y="268" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">38</text>
 
                         {/* 下部 ピッチ寸法線 (250, 250) */}
-                        <g stroke="#9ca3af" strokeWidth="1.2">
-                            <line x1="95" y1="230" x2="330" y2="230" />
-                            <line x1="330" y1="230" x2="565" y2="230" />
-                            <line x1="95" y1="220" x2="95" y2="240" />
-                            <line x1="330" y1="220" x2="330" y2="240" />
-                            <line x1="565" y1="220" x2="565" y2="240" />
+                        <g stroke="#a1a1aa" strokeWidth="1.2">
+                            <line x1="150" y1="315" x2="400" y2="315" markerStart="url(#arrow-start-500)" markerEnd="url(#arrow-end-500)" />
+                            <line x1="400" y1="315" x2="650" y2="315" markerStart="url(#arrow-start-500)" markerEnd="url(#arrow-end-500)" />
                         </g>
-                        <text x="212" y="252" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">250</text>
-                        <text x="448" y="252" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">250</text>
+                        <rect x="250" y="322" width="50" height="22" rx="3" fill="#1c1c1e" />
+                        <text x="275" y="339" fill="#f4f4f5" fontSize="19" fontWeight="bold" textAnchor="middle">250</text>
+                        <rect x="500" y="322" width="50" height="22" rx="3" fill="#1c1c1e" />
+                        <text x="525" y="339" fill="#f4f4f5" fontSize="19" fontWeight="bold" textAnchor="middle">250</text>
                     </svg>
                 );
             } else if (size === '1000') {
                 return (
-                    <svg viewBox="0 0 660 290" className="w-full h-auto max-h-[210px] text-white drop-shadow-md select-none font-mono">
+                    <svg viewBox="0 0 760 380" className="w-full h-auto max-h-[240px] text-white select-none font-mono">
+                        <defs>
+                            <marker id="arrow-start-1000" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                <path d="M 8 1.5 L 0 5 L 8 8.5 z" fill="#e4e4e7" />
+                            </marker>
+                            <marker id="arrow-end-1000" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                <path d="M 2 1.5 L 10 5 L 2 8.5 z" fill="#e4e4e7" />
+                            </marker>
+                        </defs>
+
                         {/* 基準芯 A, B (一点鎖線) */}
-                        <g stroke="#71717a" strokeWidth="1.2" strokeDasharray="6,3,2,3">
-                            <line x1="95" y1="42" x2="95" y2="245" />
-                            <line x1="565" y1="42" x2="565" y2="245" />
+                        <g stroke="#71717a" strokeWidth="1.2" strokeDasharray="8,4,2,4">
+                            <line x1="120" y1="50" x2="120" y2="360" />
+                            <line x1="620" y1="50" x2="620" y2="360" />
                         </g>
-                        <text x="95" y="32" fill="#f4f4f5" fontSize="22" fontWeight="800" textAnchor="middle">A</text>
-                        <text x="565" y="32" fill="#f4f4f5" fontSize="22" fontWeight="800" textAnchor="middle">B</text>
+                        <text x="120" y="32" fill="#f4f4f5" fontSize="22" fontWeight="bold" textAnchor="middle">A</text>
+                        <text x="620" y="32" fill="#f4f4f5" fontSize="22" fontWeight="bold" textAnchor="middle">B</text>
 
                         {/* 上部寸法線 (500) */}
-                        <g stroke="#9ca3af" strokeWidth="1.2">
-                            <line x1="95" y1="46" x2="565" y2="46" />
-                            <line x1="95" y1="36" x2="95" y2="56" />
-                            <line x1="565" y1="36" x2="565" y2="56" />
+                        <g stroke="#a1a1aa" strokeWidth="1.2">
+                            <line x1="120" y1="40" x2="120" y2="60" />
+                            <line x1="620" y1="40" x2="620" y2="60" />
+                            <line x1="120" y1="50" x2="620" y2="50" markerStart="url(#arrow-start-1000)" markerEnd="url(#arrow-end-1000)" />
                         </g>
-                        <text x="330" y="40" fill="#f4f4f5" fontSize="22" fontWeight="800" textAnchor="middle">500</text>
+                        <rect x="345" y="36" width="50" height="24" rx="4" fill="#1c1c1e" />
+                        <text x="370" y="54" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">500</text>
 
-                        {/* ハゼ部寸法線 左(21), 右(16) */}
-                        <g stroke="#9ca3af" strokeWidth="1">
-                            <line x1="84.5" y1="62" x2="105.5" y2="62" />
-                            <line x1="84.5" y1="52" x2="84.5" y2="72" />
-                            <line x1="105.5" y1="52" x2="105.5" y2="72" />
+                        {/* ハゼ部寸法線: 左(21), 右(16) */}
+                        <g stroke="#a1a1aa" strokeWidth="1">
+                            {/* 左 21 */}
+                            <line x1="109.5" y1="80" x2="109.5" y2="105" />
+                            <line x1="130.5" y1="80" x2="130.5" y2="105" />
+                            <line x1="85" y1="90" x2="109.5" y2="90" markerEnd="url(#arrow-end-1000)" />
+                            <line x1="155" y1="90" x2="130.5" y2="90" markerEnd="url(#arrow-end-1000)" />
 
-                            <line x1="557" y1="62" x2="573" y2="62" />
-                            <line x1="557" y1="52" x2="557" y2="72" />
-                            <line x1="573" y1="52" x2="573" y2="72" />
+                            {/* 右 16 */}
+                            <line x1="612" y1="80" x2="612" y2="105" />
+                            <line x1="628" y1="80" x2="628" y2="105" />
+                            <line x1="590" y1="90" x2="612" y2="90" markerEnd="url(#arrow-end-1000)" />
+                            <line x1="650" y1="90" x2="628" y2="90" markerEnd="url(#arrow-end-1000)" />
                         </g>
-                        <text x="95" y="58" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">21</text>
-                        <text x="565" y="58" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">16</text>
+                        <text x="120" y="85" fill="#f4f4f5" fontSize="17" fontWeight="bold" textAnchor="middle">21</text>
+                        <text x="620" y="85" fill="#f4f4f5" fontSize="17" fontWeight="bold" textAnchor="middle">16</text>
 
-                        {/* 大型馳折板 本体 断面線 (白色 太線) */}
-                        <path d="M 74 94 L 84.5 87 L 84.5 71 L 105.5 71 L 105.5 87 L 145 87 L 235 195 L 425 195 L 515 87 L 557 87 L 557 95 L 573 95 L 573 71 L 550 71 L 550 77"
-                              fill="none" stroke="#ffffff" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
+                        {/* 大型馳折板 本体 断面線 (白色 5px 実線) */}
+                        <path d="M 97 132 L 105 125 L 109.5 105 L 130.5 105 L 130.5 131 L 171.5 131 L 270 288 L 470 288 L 568.5 131 L 610 131 L 610 120 L 626 120 L 626 137 L 634 137 L 634 105 L 610 105 L 610 110"
+                              fill="none" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+
+                        {/* 左端 小リブ引き出し矢印 */}
+                        <g stroke="#a1a1aa" strokeWidth="1">
+                            <line x1="85" y1="110" x2="99" y2="124" markerEnd="url(#arrow-end-1000)" />
+                        </g>
 
                         {/* 肩部 水平寸法 (41, 41) */}
-                        <g stroke="#9ca3af" strokeWidth="1">
-                            <line x1="105.5" y1="102" x2="145" y2="102" />
-                            <line x1="105.5" y1="92" x2="105.5" y2="112" />
-                            <line x1="145" y1="92" x2="145" y2="112" />
-
-                            <line x1="515" y1="102" x2="557" y2="102" />
-                            <line x1="515" y1="92" x2="515" y2="112" />
-                            <line x1="557" y1="92" x2="557" y2="112" />
+                        <g stroke="#a1a1aa" strokeWidth="1">
+                            {/* 左 41 */}
+                            <line x1="130.5" y1="131" x2="130.5" y2="180" />
+                            <line x1="171.5" y1="131" x2="171.5" y2="180" />
+                            <line x1="130.5" y1="165" x2="171.5" y2="165" markerStart="url(#arrow-start-1000)" markerEnd="url(#arrow-end-1000)" />
+                            {/* 右 41 */}
+                            <line x1="568.5" y1="131" x2="568.5" y2="180" />
+                            <line x1="609.5" y1="131" x2="609.5" y2="180" />
+                            <line x1="568.5" y1="165" x2="609.5" y2="165" markerStart="url(#arrow-start-1000)" markerEnd="url(#arrow-end-1000)" />
                         </g>
-                        <text x="125" y="118" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">41</text>
-                        <text x="536" y="118" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">41</text>
+                        <text x="151" y="156" fill="#f4f4f5" fontSize="17" fontWeight="bold" textAnchor="middle">41</text>
+                        <text x="589" y="156" fill="#f4f4f5" fontSize="17" fontWeight="bold" textAnchor="middle">41</text>
 
-                        {/* 高さ寸法 (26, 160, 183, 24) */}
-                        <g stroke="#9ca3af" strokeWidth="1">
-                            <line x1="105.5" y1="71" x2="215" y2="71" />
-                            <line x1="145" y1="87" x2="205" y2="87" />
-                            <line x1="185" y1="71" x2="185" y2="87" />
+                        {/* 高さ寸法 (26, 160, 183) */}
+                        <g stroke="#a1a1aa" strokeWidth="1.2">
+                            {/* 段差 26 */}
+                            <line x1="130.5" y1="105" x2="240" y2="105" />
+                            <line x1="171.5" y1="131" x2="230" y2="131" />
+                            <line x1="225" y1="85" x2="225" y2="105" markerEnd="url(#arrow-end-1000)" />
+                            <line x1="225" y1="150" x2="225" y2="131" markerEnd="url(#arrow-end-1000)" />
 
-                            <line x1="235" y1="195" x2="330" y2="195" />
-                            <line x1="250" y1="195" x2="250" y2="87" />
-                            <line x1="285" y1="195" x2="285" y2="71" />
+                            {/* 160 (谷底〜肩部) */}
+                            <line x1="270" y1="288" x2="385" y2="288" />
+                            <line x1="171.5" y1="131" x2="330" y2="131" />
+                            <line x1="315" y1="131" x2="315" y2="288" markerStart="url(#arrow-start-1000)" markerEnd="url(#arrow-end-1000)" />
 
-                            <line x1="573" y1="71" x2="605" y2="71" />
-                            <line x1="573" y1="95" x2="605" y2="95" />
-                            <line x1="595" y1="71" x2="595" y2="95" />
+                            {/* 183 (谷底〜ハゼ頂部) */}
+                            <line x1="130.5" y1="105" x2="365" y2="105" />
+                            <line x1="350" y1="105" x2="350" y2="288" markerStart="url(#arrow-start-1000)" markerEnd="url(#arrow-end-1000)" />
+
+                            {/* 右ハゼ高さ 24 */}
+                            <line x1="634" y1="105" x2="665" y2="105" />
+                            <line x1="634" y1="137" x2="665" y2="137" />
+                            <line x1="655" y1="85" x2="655" y2="105" markerEnd="url(#arrow-end-1000)" />
+                            <line x1="655" y1="157" x2="655" y2="137" markerEnd="url(#arrow-end-1000)" />
                         </g>
-                        <text x="185" y="83" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="middle">26</text>
-                        <text x="246" y="146" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">160</text>
-                        <text x="285" y="136" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">183</text>
-                        <text x="612" y="87" fill="#e4e4e7" fontSize="19" fontWeight="bold" textAnchor="start">24</text>
+                        <text x="225" y="123" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">26</text>
+                        <text x="305" y="215" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle" transform="rotate(-90 305 215)">160</text>
+                        <text x="340" y="200" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle" transform="rotate(-90 340 200)">183</text>
+                        <text x="670" y="126" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="start">24</text>
 
                         {/* 下部 割付寸法線 (150, 200, 150) */}
-                        <g stroke="#9ca3af" strokeWidth="1.2">
-                            <line x1="95" y1="215" x2="235" y2="215" />
-                            <line x1="235" y1="215" x2="425" y2="215" />
-                            <line x1="425" y1="215" x2="565" y2="215" />
-                            <line x1="95" y1="205" x2="95" y2="225" />
-                            <line x1="235" y1="195" x2="235" y2="225" />
-                            <line x1="425" y1="195" x2="425" y2="225" />
-                            <line x1="565" y1="205" x2="565" y2="225" />
+                        <g stroke="#a1a1aa" strokeWidth="1.2">
+                            <line x1="120" y1="315" x2="120" y2="335" />
+                            <line x1="270" y1="288" x2="270" y2="335" />
+                            <line x1="470" y1="288" x2="470" y2="335" />
+                            <line x1="620" y1="315" x2="620" y2="335" />
+
+                            <line x1="120" y1="325" x2="270" y2="325" markerStart="url(#arrow-start-1000)" markerEnd="url(#arrow-end-1000)" />
+                            <line x1="270" y1="325" x2="470" y2="325" markerStart="url(#arrow-start-1000)" markerEnd="url(#arrow-end-1000)" />
+                            <line x1="470" y1="325" x2="620" y2="325" markerStart="url(#arrow-start-1000)" markerEnd="url(#arrow-end-1000)" />
                         </g>
-                        <text x="165" y="238" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">150</text>
-                        <text x="330" y="238" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">200</text>
-                        <text x="495" y="238" fill="#f4f4f5" fontSize="20" fontWeight="bold" textAnchor="middle">150</text>
+                        <rect x="170" y="332" width="50" height="22" rx="3" fill="#1c1c1e" />
+                        <text x="195" y="349" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">150</text>
+                        <rect x="345" y="332" width="50" height="22" rx="3" fill="#1c1c1e" />
+                        <text x="370" y="349" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">200</text>
+                        <rect x="520" y="332" width="50" height="22" rx="3" fill="#1c1c1e" />
+                        <text x="545" y="349" fill="#f4f4f5" fontSize="18" fontWeight="bold" textAnchor="middle">150</text>
                     </svg>
                 );
             }
@@ -612,7 +706,7 @@
                                 </div>
 
                                 {/* 折板屋根 断面プロファイル表示 */}
-                                <div className="ipad-card p-3.5 flex flex-col items-center justify-center bg-black/50 border border-white/10 select-none">
+                                <div className="ipad-card p-3.5 flex flex-col items-center justify-center bg-[#111113] border border-white/10 select-none">
                                     <RoofProfileSVG size={tfSize} />
                                 </div>
 
@@ -697,7 +791,7 @@
         // PWAのアップデート検知と自動リロード
         if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js?v=202610010400').then((registration) => {
+                navigator.serviceWorker.register('./sw.js?v=202610010500').then((registration) => {
                     registration.onupdatefound = () => {
                         const installingWorker = registration.installing;
                         if (!installingWorker) return;
