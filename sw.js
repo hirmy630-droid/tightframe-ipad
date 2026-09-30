@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tightframe-calc-v20261001-03';
+const CACHE_NAME = 'tightframe-calc-v20261001-04';
 const APP_SHELL = [
   './',
   './index.html',
