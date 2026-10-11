@@ -371,7 +371,7 @@
             <div class="table-area"><div class="table-card">
                 <div class="bg-[#2c2c2e] p-3 border-b border-[#444]">
                     <div class="flex justify-between items-center"><div class="font-bold text-base">全長: <span id="edge-L">-</span>㎜</div><button id="share-edge" type="button" class="layout-share-button" onclick="shareLayout('edge')" aria-label="共有" title="共有"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3m-4 4 4-4 4 4M7 10H5v11h14V10h-2"/></svg></button></div>
-                    <div class="font-bold text-base mt-2">タイプ <span id="edge-size">-</span>㎜ / 屋根材 <span id="edge-sheets" class="text-orange-400">-</span>枚</div>
+                    <div class="font-bold text-[14px] mt-2 flex items-center justify-between gap-2 whitespace-nowrap"><span><span id="edge-size">-</span>タイプ</span><span class="ml-auto text-right">屋根材 <span id="edge-sheets" class="text-orange-400">-</span>枚</span></div>
                     <div id="edge-shoulders" style="font-size:14px" class="text-[14px] font-bold mt-1 whitespace-nowrap overflow-x-auto" title="① 全長の端から山の内側の肩まで（mm）">谷芯 左-・右-、山芯 左-・右-</div>
                     <div class="mt-2"><select id="edge-side" onchange="setKerabaSide(this.value)" style="background:#2c2c2e;color:white;border:1px solid #444;border-radius:6px;padding:6px;font-size:14px"><option value="left">ケラバ：左端1本</option><option value="both" selected>ケラバ：左右各1本</option></select></div>
                 </div>
@@ -390,7 +390,8 @@
                             <span class="font-bold text-base">全長: <span id="table-badge-L">-</span>㎜</span>
                             <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><button id="table-mode" type="button" onclick="toggleTableKeraba()" aria-pressed="false" class="text-sm bg-[#ff9f0a] px-2 py-0.5 rounded font-bold text-black shadow-sm">割付表</button><button id="share-table" type="button" class="layout-share-button" onclick="shareLayout('table')" aria-label="共有" title="共有"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3m-4 4 4-4 4 4M7 10H5v11h14V10h-2"/></svg></button></div>
                         </div>
-                        <div class="font-bold text-base mt-2">タイプ <span id="table-badge-size">-</span>㎜ / 屋根材 <span id="table-badge-Sheets" class="text-orange-400">-</span>枚</div>
+                        <div class="font-bold text-[14px] mt-2 flex items-center justify-between gap-2 whitespace-nowrap"><span><span id="table-badge-size">-</span>タイプ</span><span id="roof-count-inline" class="ml-auto text-right">屋根材 -枚</span><span class="hidden"><span id="table-badge-Sheets">-</span></span></div>
+
                     <div id="table-shoulders" style="font-size:14px" class="text-[14px] font-bold mt-1 whitespace-nowrap overflow-x-auto" title="① 全長の端から山の内側の肩まで（mm）">谷芯 左-・右-、山芯 左-・右-</div>
                         <div id="table-side-wrap" class="mt-2 hidden"><select id="table-side" onchange="setKerabaSide(this.value)" style="background:#2c2c2e;color:white;border:1px solid #444;border-radius:6px;padding:6px;font-size:14px"><option value="left">ケラバ：左端1本</option><option value="both" selected>ケラバ：左右各1本</option></select></div>
                     </div>
@@ -602,7 +603,11 @@ function kerabaModel(r,kind){
         // 左列は谷芯割、右列は山芯割。数値が違う場合は同じ順序で併記する。
         const pair = (a, b) => a === b ? String(a) : `${a} / ${b}`;
         const value = (r, key) => r.error ? '-' : fmt(r[key]);
-        document.getElementById('table-badge-Sheets').innerText = pair(value(tani,'roofCount'),value(yama,'roofCount'));
+        const taniSheets=value(base.tani,'roofCount'),yamaSheets=value(base.yama,'roofCount');
+        const separateSheets=!base.tani.error&&!base.yama.error&&taniSheets!==yamaSheets;
+        const sheets=document.getElementById('table-badge-Sheets');
+        sheets.innerText=pair(taniSheets,yamaSheets);
+        document.getElementById('roof-count-inline').innerText=separateSheets?`谷芯${taniSheets}枚・山芯${yamaSheets}枚`:`屋根材 ${pair(taniSheets,yamaSheets)}枚`;
         document.getElementById('foot-count-tani').innerText = value(tani,'frames');
         document.getElementById('foot-count-yama').innerText = value(yama,'frames');
         const rem = frameRemainder;
