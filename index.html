@@ -600,6 +600,17 @@ function kerabaModel(r,kind){
 }
 
 
+    // ①：全長の切断端から、端の山の内側の肩まで。
+    // 1000タイプは山半幅に水平の肩41mmを加える。
+    function roofShoulders(r, type) {
+        if (r.error) return {left:'-',right:'-'};
+        const offsets = {'600':[33.5/2,35/2], '500':[38/2,36/2], '1000':[21/2+41,16/2+41]};
+        const [leftOffset,rightOffset] = offsets[type];
+        const left = r.peaks[0] + leftOffset;
+        const right = r.L - r.peaks[r.peaks.length-1] + rightOffset;
+        // 極端に短く、肩の位置が全長外になる納まりは数値表示しない。
+        return {left:left<=r.L?fmt(left):'-', right:right<=r.L?fmt(right):'-'};
+    }
     function frameRemainder(r) {
         return r.error ? '-' : !r.rows.length ? '0' : fmt(r.rows[r.rows.length - 1].peaks.length * r.c.pitch);
     }
@@ -627,6 +638,7 @@ function kerabaModel(r,kind){
             const visible = useMemo(()=>({tani:keraba?kerabaModel(layouts.tani,side):layouts.tani,yama:keraba?kerabaModel(layouts.yama,side):layouts.yama,edge:kerabaModel(layouts.edge,side)}),[layouts,keraba,side]);
             const L = Number(tfTotalL);
             const tfResults = {centerL:tfTotalL!==''&&Number.isFinite(L)&&L>60?L/2:'',taniZan:!visible.tani.error&&visible.tani.rows.length?visible.tani.rows[0].start:'',yamaZan:!visible.yama.error&&visible.yama.rows.length?visible.yama.rows[0].start:'',roofTaniCount:layouts.tani.error?'-':layouts.tani.roofCount,roofYamaCount:layouts.yama.error?'-':layouts.yama.roofCount};
+            const shoulderTani=roofShoulders(layouts.tani,tfSize),shoulderYama=roofShoulders(layouts.yama,tfSize),shoulderEdge=roofShoulders(layouts.edge,tfSize);
             const isEdge=activeTable==='edge',a=isEdge?layouts.edge:visible.tani,b=isEdge?visible.edge:visible.yama;
             const ka=!isEdge&&keraba,kb=isEdge||keraba;
             const val=(r,key)=>r.error?'-':fmt(r[key]);
@@ -636,6 +648,7 @@ function kerabaModel(r,kind){
                 if(tfTotalL===''||(a.error&&b.error))return '';
                 const headings=isEdge?['ケラバなし','ケラバあり']:['谷芯割','山芯割'];
                 const lines=[`タイトフレーム｜${isEdge?'片張り':'割付表'}`,`全長：${fmt(L)}mm`,`タイプ：${tfSize}`,`屋根材：${roofText}枚`,`ケラバ：${isEdge||keraba?(side==='both'?'左右各1本':'左端1本'):'なし'}`];
+                lines.push(isEdge?`① 左${shoulderEdge.left}・右${shoulderEdge.right}mm`:`① 谷芯 左${shoulderTani.left}・右${shoulderTani.right}mm、山芯 左${shoulderYama.left}・右${shoulderYama.right}mm`);
                 if(!isEdge&&roofText.includes('/'))lines.push('屋根材枚数の順：谷芯割／山芯割');
                 lines.push('単位：mm（左端からの寸法）','',`本｜${headings.join('｜')}`);
                 const kc=(r,key,on)=>on&&!r.error&&r[key]!=null?`ケラバ 山芯 ${fmt(r[key])}`:'-';
@@ -779,7 +792,10 @@ function kerabaModel(r,kind){
                                             <button type="button" onClick={shareCurrent} disabled={sharing} className="share-icon" aria-label="共有" title="共有"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 15V3m-4 4 4-4 4 4M7 10H5v11h14V10h-2"/></svg></button>
                                         </div>
                                     </div>
-                                    <div className="font-bold mt-2">タイプ {tfSize} mm / 屋根材 <span className="text-orange-400" title="谷芯割／山芯割の順">{roofText}</span> 枚</div>
+                                    <div className="font-bold mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                                        <div className="flex flex-wrap gap-x-3 gap-y-1">{isEdge?<span>屋根材 <span className="text-orange-400">{roofText}</span>枚</span>:<><span>屋根材 谷芯 <span className="text-blue-400">{tfResults.roofTaniCount}</span>枚</span><span>山芯 <span className="text-emerald-400">{tfResults.roofYamaCount}</span>枚</span></>}</div>
+                                        <div className="flex flex-wrap gap-x-3 gap-y-1" title="① 全長の端から山の内側の肩まで（mm）">{isEdge?<span>① 左{shoulderEdge.left}・右{shoulderEdge.right}</span>:<><span className="whitespace-nowrap">① 谷芯 左{shoulderTani.left}・右{shoulderTani.right}</span><span className="whitespace-nowrap">山芯 左{shoulderYama.left}・右{shoulderYama.right}</span></>}</div>
+                                    </div>
                                     {(isEdge||keraba)&&<select aria-label="ケラバの取り付け側" value={side} onChange={e=>setSide(e.target.value)} className="side-select mt-2"><option value="left">ケラバ：左端1本</option><option value="both">ケラバ：左右各1本</option></select>}
                                 </div>
                                 <div id="ipad-layout-panel" role="tabpanel" className="flex-1 ipad-scroll bg-[#171719]" key={activeTable}>
