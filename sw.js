@@ -1,8 +1,8 @@
 'use strict';
 const BASE = new URL('./', self.registration.scope);
 const INDEX_URL = new URL('index.html', BASE).href;
-const CACHE_PREFIX = 'tightframe-calc:' + encodeURIComponent(BASE.href) + ':';
-const CACHE_NAME = CACHE_PREFIX + '20261011-210246-ipad';
+const CACHE_PREFIX = 'kyowa-tight-frame:' + encodeURIComponent(BASE.href) + ':';
+const CACHE_NAME = CACHE_PREFIX + '20261011-211536';
 
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
