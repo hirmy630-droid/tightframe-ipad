@@ -1,77 +1,46 @@
-const CACHE_NAME = 'tightframe-calc-v20261001-04';
-const APP_SHELL = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-180.png',
-  './icon-192.png',
-  './icon-512.png'
-];
+'use strict';
+const BASE = new URL('./', self.registration.scope);
+const INDEX_URL = new URL('index.html', BASE).href;
+const CACHE_PREFIX = 'tightframe-calc:' + encodeURIComponent(BASE.href) + ':';
+const CACHE_NAME = CACHE_PREFIX + '20261011-201841-ipad';
 
-self.addEventListener('install', (event) => {
-  self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL))
-  );
+self.addEventListener('install', event => {
+  event.waitUntil((async () => {
+    const response = await fetch(INDEX_URL, { cache: 'no-store' });
+    if (!response.ok) throw new Error('index.html could not be fetched');
+    const cache = await caches.open(CACHE_NAME);
+    await cache.put(INDEX_URL, response);
+    await self.skipWaiting();
+  })());
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    (async () => {
-      const keys = await caches.keys();
-      await Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
-      );
-      await self.clients.claim();
-    })()
-  );
+self.addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    const names = await caches.keys();
+    await Promise.all(names.filter(name => name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME).map(name => caches.delete(name)));
+    await self.clients.claim();
+  })());
 });
 
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
-  if (req.method !== 'GET') return;
-
-  const url = new URL(req.url);
-  const isSameOrigin = url.origin === self.location.origin;
-  if (!isSameOrigin) return;
-
-  const isNavigation = req.mode === 'navigate';
-  const isCoreFile = (
-    url.pathname.endsWith('/index.html') ||
-    url.pathname.endsWith('/manifest.json') ||
-    url.pathname.endsWith('/sw.js') ||
-    url.pathname.endsWith('/icon-180.png') ||
-    url.pathname.endsWith('/icon-192.png') ||
-    url.pathname.endsWith('/icon-512.png') ||
-    url.pathname === self.location.pathname.replace(/\/sw\.js$/, '/')
-  );
-
-  if (isNavigation || isCoreFile) {
-    event.respondWith(
-      fetch(req)
-        .then((networkRes) => {
-          const copy = networkRes.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
-          return networkRes;
-        })
-        .catch(async () => {
-          const cached = await caches.match(req);
-          if (cached) return cached;
-          return caches.match('./index.html');
-        })
-    );
-    return;
-  }
-
-  event.respondWith(
-    caches.match(req).then((cached) => {
-      return cached || fetch(req).then((networkRes) => {
-        const copy = networkRes.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
-        return networkRes;
-      });
-    })
-  );
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  if (request.method !== 'GET' || request.mode !== 'navigate') return;
+  const url = new URL(request.url);
+  if (url.origin !== BASE.origin || (url.pathname !== BASE.pathname && url.pathname !== new URL(INDEX_URL).pathname)) return;
+  event.respondWith((async () => {
+    try {
+      const response = await fetch(request, { cache: 'no-store' });
+      if (response.ok) {
+        const cache = await caches.open(CACHE_NAME);
+        await cache.put(INDEX_URL, response.clone());
+        return response;
+      }
+      const cached = await caches.match(INDEX_URL, { cacheName: CACHE_NAME });
+      return cached || response;
+    } catch (error) {
+      const cached = await caches.match(INDEX_URL, { cacheName: CACHE_NAME });
+      if (cached) return cached;
+      throw error;
+    }
+  })());
 });

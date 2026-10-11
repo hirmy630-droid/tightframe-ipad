@@ -24,8 +24,8 @@
             theme: {
                 extend: {
                     fontSize: {
-                        xs: ['14px', '1.4'],
-                        sm: ['15px', '1.4'],
+                        xs: ['16px', '1.4'],
+                        sm: ['16px', '1.4'],
                         base: ['16px', '1.5'],
                         lg: ['18px', '1.5'],
                         xl: ['20px', '1.4'],
@@ -56,7 +56,7 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <!-- Babel for JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.28.5/babel.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Noto+Sans+JP:wght@500;700;900&display=swap');
@@ -148,14 +148,47 @@
             border-radius: 9999px;
         }
 
-        /* 14px未満のスタイルをすべて最低14pxに強制 */
+        /* 通常画面の文字は最低16px（断面図のSVGは個別指定） */
         [class*="text-[10px]"],
         [class*="text-[11px]"],
         [class*="text-[12px]"],
-        [class*="text-[13px]"] {
-            font-size: 14px !important;
+        [class*="text-[13px]"],
+        [class*="text-[14px]"],
+        [class*="text-[15px]"] {
+            font-size: 16px !important;
             line-height: 1.4 !important;
         }
+            .ipad-key { box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 -2px 2px rgba(0,0,0,.25); }
+        .keraba-inline { min-height:32px; padding:2px 8px; border:1px solid #48484a; border-radius:7px; background:#2c2c2e; color:#a1a1aa; }
+        .keraba-inline[aria-pressed="true"] { color:#ff9f0a; }
+        .parameter-box { display:flex; align-items:center; flex-wrap:wrap; gap:2px 6px; min-width:0; min-height:40px; padding:6px 8px; border:1px solid #38383a; border-radius:10px; background:#111113; }
+        .parameter-select { flex:1; min-width:72px; width:0; color:#fff; background:transparent; padding:2px 0; }
+        .parameter-value { flex:1; text-align:right; white-space:nowrap; }
+        main { min-height:0; }
+        @media (min-width:768px) {
+            .left-column.left-column { display:grid; grid-template-rows:auto minmax(0,1fr) auto; gap:clamp(6px,1.1dvh,12px); height:100%; min-height:0; overflow:hidden; padding-right:0; }
+            .input-card.input-card { padding:clamp(8px,1.3dvh,12px); }
+            .input-card > :not([hidden]) ~ :not([hidden]) { margin-top:clamp(4px,.8dvh,8px); }
+            .profile-card.profile-card { min-height:0; padding:6px; overflow:hidden; }
+            .profile-card > svg { min-height:0; max-height:100%; flex-shrink:1; }
+            .summary-cards.summary-cards { gap:8px; }
+            .summary-cards > .ipad-card { padding:clamp(8px,1.1dvh,12px); }
+            .summary-cards .mb-1 { margin-bottom:2px; }
+        }
+        .right-header { padding:12px; background:#252528; border-bottom:1px solid #38383a; }
+        .right-tabs { display:flex; gap:0; border:1px solid #48484a; border-radius:10px; overflow:hidden; margin-bottom:10px; }
+        .right-tabs button { flex:1; min-height:40px; font-weight:700; color:#a1a1aa; }
+        .right-tabs button.selected { background:#3a3a3e; color:#ff9f0a; }
+        .length-share-row { display:flex; align-items:center; justify-content:space-between; gap:6px; }
+        .header-actions { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+        .mode-button { background:#ff9f0a; color:#000; padding:4px 8px; border-radius:6px; font-weight:700; font-size:16px; }
+        .share-icon { width:40px; height:40px; display:inline-flex; justify-content:center; align-items:center; border:1px solid #48484a; border-radius:10px; color:#0a84ff; background:#2c2c2e; }
+        .share-icon:disabled { opacity:.5; }
+        .side-select { max-width:100%; background:#2c2c2e; border:1px solid #48484a; border-radius:7px; padding:6px; color:#fff; font-size:16px; }
+        .layout-cell { padding:12px 4px; border-bottom:1px solid #333; border-right:1px solid #333; font-size:20px; font-weight:700; }
+        .keraba-divider-top > td { border-top:2px solid #b8b8bd; }
+        .keraba-divider-bottom > td { border-bottom:2px solid #b8b8bd; }
+        @media (max-width:767px) { main { overflow-y:auto!important; } }
     </style>
 </head>
 <body class="flex flex-col h-screen select-none">
@@ -170,7 +203,7 @@
             if (val === '' || val === undefined || val === null) return '';
             const clean = unformat(val);
             const num = parseFloat(clean);
-            return isNaN(num) ? val : Math.round(num).toLocaleString();
+            return isNaN(num) ? val : num.toLocaleString('ja-JP', { maximumFractionDigits: 3 });
         };
         const excelMod = (n, d) => d === 0 ? 0 : n - d * Math.floor(n / d);
 
@@ -352,7 +385,7 @@
                               fill="none" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
 
                         {/* 3R 3R アール表記（山頂内側・谷底内側） */}
-                        <g fill="#d4d4d8" fontSize="13" fontWeight="bold">
+                        <g fill="#d4d4d8" fontSize="14" fontWeight="bold">
                             {/* 左山 */}
                             <text x="127" y="118">3R</text>
                             <text x="153" y="118">3R</text>
@@ -526,81 +559,107 @@
             return null;
         };
 
+const CONFIG={600:{pitch:200,roofWidth:600,valleys:3,mountains:3,frameWidth:600},500:{pitch:250,roofWidth:500,valleys:2,mountains:2,frameWidth:500},1000:{pitch:500,roofWidth:500,valleys:1,mountains:2,frameWidth:1000}};
+const fmt=n=>n.toLocaleString('ja-JP',{maximumFractionDigits:3});
+const mod=(n,p)=>((n%p)+p)%p;
+const tolerantCeil=n=>Math.max(0,Math.ceil(n-1e-9));
+const tolerantFloor=n=>Math.floor(n+1e-9);
+function calculateModel(length,type,mode){
+ const c=CONFIG[type],L=Number(length);
+ if(!c||!['edge','tani','yama'].includes(mode))return {error:'タイプ・割付基準を確認してください。'};
+ if(String(length).trim()===''||!Number.isFinite(L)||L<=60)return {error:'外端間の全長を60mmより大きい数値で入力してください。'};
+ if(L>1000000)return {error:'全長は1,000,000mm以下で入力してください。'};
+ const core=mode==='edge'?L-60:L,p=c.pitch;
+ const origin=mode==='edge'?30:0;
+ const firstCore=mode==='edge'?0:mod(core/2-(mode==='tani'?p/2:0),p);
+ const start=Math.abs(firstCore)<1e-7||Math.abs(firstCore-p)<1e-7?0:firstCore;
+ const count=start<=core+1e-7?tolerantFloor((core-start)/p)+1:0;
+ const peaks=Array.from({length:Math.max(0,count)},(_,i)=>origin+start+i*p);
+ if(!peaks.length)return {error:'この全長と中央割付では、計算範囲内に山が入りません。端から山始まりを選ぶか、端部の納まりを確認してください。'};
+ // 屋根材とタイトで同じ山・谷の位置を使用。切断線の内側にある谷芯を数える。
+ const valleyPhase=mod(origin+start+p/2,p);
+ const firstValley=Math.abs(valleyPhase)<1e-7? p:valleyPhase;
+ const valleys=firstValley<L-1e-7?tolerantCeil((L-firstValley)/p):0;
+ // 山が存在する有効な割付では、谷芯が切断範囲内にない場合も屋根材が最低1枚必要。
+ const roofCount=Math.max(1,tolerantCeil(valleys/c.valleys));
+ const frames=tolerantCeil(peaks.length/c.mountains);
+ const unused=frames*c.mountains-peaks.length;
+ return {L,core,c,start,peaks,valleys,roofCount,frames,unused,roofUnused:roofCount*c.valleys-valleys,rows:groupPeaks(peaks,c)};
+}
+function groupPeaks(peaks,c){const rows=[];for(let i=0;i<peaks.length;i+=c.mountains){const used=peaks.slice(i,i+c.mountains);rows.push({start:used[0]-c.pitch/2,end:used[used.length-1]+c.pitch/2,peaks:used});}return rows;}
+function kerabaModel(r,kind){
+ if(r.error)return r;
+ const inside=r.peaks.filter(x=>x>1e-7&&x<r.L-1e-7);
+ const count=kind==='both'?2:1;
+ if(inside.length<count)return {error:'全長の内側にケラバを配置する山数が足りません。'};
+ const left=inside[0],right=kind==='both'?inside[inside.length-1]:null;
+ // ケラバより外側・切断線上の山を通常タイトへ戻さない。
+ const normal=r.peaks.filter(x=>x>left+1e-7&&(right==null||x<right-1e-7));
+ const rows=groupPeaks(normal,r.c).map(row=>({...row,start:Math.max(0,row.start),end:Math.min(r.L,row.end)}));
+ return {...r,count,normal,frames:tolerantCeil(normal.length/r.c.mountains),unused:tolerantCeil(normal.length/r.c.mountains)*r.c.mountains-normal.length,rows,left,right};
+}
+
+
+    function frameRemainder(r) {
+        return r.error ? '-' : !r.rows.length ? '0' : fmt(r.rows[r.rows.length - 1].peaks.length * r.c.pitch);
+    }
+        const readSaved = (key, fallback) => { try { return localStorage.getItem(key) ?? fallback; } catch (_) { return fallback; } };
+        const saveSaved = (key, value) => { try { localStorage.setItem(key, value); } catch (_) {} };
         function App() {
-            const [tfSize, setTfSize] = useState(() => localStorage.getItem('ipad_tf_size') || '600');
-            const [tfTotalL, setTfTotalL] = useState(() => localStorage.getItem('ipad_tf_total_l') || '');
+            const [tfSize, setTfSize] = useState(() => ['600','500','1000'].includes(readSaved('ipad_tf_size','600')) ? readSaved('ipad_tf_size','600') : '600');
+            const [tfTotalL, setTfTotalL] = useState(() => /^\d*$/.test(readSaved('ipad_tf_total_l','')) ? readSaved('ipad_tf_total_l','') : '');
+            const [keraba, setKeraba] = useState(() => readSaved('ipad_tf_keraba','false') === 'true');
+            const [side, setSide] = useState(() => readSaved('ipad_tf_side','both') === 'left' ? 'left' : 'both');
+            const [activeTable, setActiveTable] = useState('table');
             const [toastMsg, setToastMsg] = useState('');
-
-            const showToast = useCallback((msg) => {
-                setToastMsg(msg);
-                setTimeout(() => setToastMsg(''), 2200);
-            }, []);
-
-            // テンキー入力ハンドラー
-            const handleKeypadPress = (val) => {
-                setTfTotalL((prev) => {
-                    const clean = unformat(prev);
-                    if (val === 'クリア') return '';
-                    if (val === 'BS') return clean.slice(0, -1);
-                    if (clean.length >= 8) return clean; // 最大桁数ガード
-                    return clean + val;
-                });
+            const [sharing, setSharing] = useState(false);
+            const shareBusy = useRef(false);
+            const toastTimer = useRef(null);
+            const showToast = useCallback(msg => { clearTimeout(toastTimer.current); setToastMsg(msg); toastTimer.current=setTimeout(()=>setToastMsg(''),2200); }, []);
+            useEffect(()=>()=>clearTimeout(toastTimer.current),[]);
+            useEffect(()=>saveSaved('ipad_tf_size',tfSize),[tfSize]);
+            useEffect(()=>saveSaved('ipad_tf_total_l',tfTotalL),[tfTotalL]);
+            useEffect(()=>saveSaved('ipad_tf_keraba',String(keraba)),[keraba]);
+            useEffect(()=>saveSaved('ipad_tf_side',side),[side]);
+            const handleKeypadPress = val => setTfTotalL(prev => val==='クリア' ? '' : val==='BS' ? prev.slice(0,-1) : (prev==='0' ? val : prev+val).slice(0,8));
+            const handleBackspace = () => handleKeypadPress('BS');
+            const layouts = useMemo(()=>({tani:calculateModel(tfTotalL,tfSize,'tani'),yama:calculateModel(tfTotalL,tfSize,'yama'),edge:calculateModel(tfTotalL,tfSize,'edge')}),[tfTotalL,tfSize]);
+            const visible = useMemo(()=>({tani:keraba?kerabaModel(layouts.tani,side):layouts.tani,yama:keraba?kerabaModel(layouts.yama,side):layouts.yama,edge:kerabaModel(layouts.edge,side)}),[layouts,keraba,side]);
+            const L = Number(tfTotalL);
+            const tfResults = {centerL:tfTotalL!==''&&Number.isFinite(L)&&L>60?L/2:'',taniZan:!visible.tani.error&&visible.tani.rows.length?visible.tani.rows[0].start:'',yamaZan:!visible.yama.error&&visible.yama.rows.length?visible.yama.rows[0].start:'',roofTaniCount:layouts.tani.error?'-':layouts.tani.roofCount,roofYamaCount:layouts.yama.error?'-':layouts.yama.roofCount};
+            const isEdge=activeTable==='edge',a=isEdge?layouts.edge:visible.tani,b=isEdge?visible.edge:visible.yama;
+            const ka=!isEdge&&keraba,kb=isEdge||keraba;
+            const val=(r,key)=>r.error?'-':fmt(r[key]);
+            const pair=(x,y)=>x===y?String(x):`${x} / ${y}`;
+            const roofText=isEdge?val(layouts.edge,'roofCount'):pair(val(layouts.tani,'roofCount'),val(layouts.yama,'roofCount'));
+            const textLines=()=>{
+                if(tfTotalL===''||(a.error&&b.error))return '';
+                const headings=isEdge?['ケラバなし','ケラバあり']:['谷芯割','山芯割'];
+                const lines=[`タイトフレーム｜${isEdge?'片張り':'割付表'}`,`全長：${fmt(L)}mm`,`タイプ：${tfSize}`,`屋根材：${roofText}枚`,`ケラバ：${isEdge||keraba?(side==='both'?'左右各1本':'左端1本'):'なし'}`];
+                if(!isEdge&&roofText.includes('/'))lines.push('屋根材枚数の順：谷芯割／山芯割');
+                lines.push('単位：mm（左端からの寸法）','',`本｜${headings.join('｜')}`);
+                const kc=(r,key,on)=>on&&!r.error&&r[key]!=null?`ケラバ 山芯 ${fmt(r[key])}`:'-';
+                if(ka||kb)lines.push(`左｜${kc(a,'left',ka)}｜${kc(b,'left',kb)}`);
+                const count=Math.max(a.rows?.length||0,b.rows?.length||0);
+                for(let i=0;i<count;i++)lines.push(`${i+1}｜${a.rows?.[i]?fmt(a.rows[i].start):'-'}｜${b.rows?.[i]?fmt(b.rows[i].start):'-'}`);
+                if((ka||kb)&&side==='both')lines.push(`右｜${kc(a,'right',ka)}｜${kc(b,'right',kb)}`);
+                for(const [r,label,on] of [[a,headings[0],ka],[b,headings[1],kb]]){lines.push(`${label}：通常タイト ${val(r,'frames')}本／端数合計 ${frameRemainder(r)}mm`);if(on)lines.push(`${label}：ケラバ ${r.error?'-':r.count}本（別）`);}
+                lines.push('本数合計・端数合計は通常タイトのみ。ケラバは別。');return lines.join('\n');
             };
-
-            // 1文字削除（BS）
-            const handleBackspace = () => {
-                setTfTotalL(prev => unformat(prev).slice(0, -1));
+            const copyText=async text=>{
+                if(navigator.clipboard&&window.isSecureContext){try{await navigator.clipboard.writeText(text);return true;}catch(_){}}
+                const field=document.createElement('textarea');field.value=text;field.readOnly=true;field.style.cssText='position:fixed;left:-9999px;top:0;font-size:16px';document.body.appendChild(field);
+                try{field.select();return document.execCommand('copy');}catch(_){return false;}finally{field.remove();}
             };
-
-            // 設定の永続化
-            useEffect(() => {
-                localStorage.setItem('ipad_tf_size', tfSize);
-            }, [tfSize]);
-
-            useEffect(() => {
-                localStorage.setItem('ipad_tf_total_l', tfTotalL);
-            }, [tfTotalL]);
-
-            // タイトフレーム割付のコア計算
-            const tfResults = useMemo(() => {
-                const size = parseInt(tfSize) || 600;
-                const L = toNum(tfTotalL);
-                let yamaDim = 0, taniDim = 0, calcSize = size;
-
-                if (size === 600) { yamaDim = 200; taniDim = 100; calcSize = 600; }
-                else if (size === 500) { yamaDim = 250; taniDim = 125; calcSize = 500; }
-                else if (size === 1000) { yamaDim = 500; taniDim = 250; calcSize = 500; }
-
-                if (L <= 0) {
-                    return { centerL: '', yamaDim, taniDim, taniZan: '', yamaZan: '', table: [], count: 0, roofTaniCount: '', roofYamaCount: '', L: 0 };
-                }
-
-                const centerL = L / 2;
-                const taniZan = excelMod(centerL, yamaDim);
-                const yamaZan = excelMod(centerL - taniDim, yamaDim);
-
-                let currentTani = taniZan;
-                let currentYama = yamaZan;
-                let table = [];
-                let count = 0;
-
-                while (currentTani <= L || currentYama <= L) {
-                    table.push({
-                        tani: (currentTani <= L && currentTani >= 0) ? currentTani : null,
-                        yama: (currentYama <= L && currentYama >= 0) ? currentYama : null
-                    });
-                    currentTani += size;
-                    currentYama += size;
-                    count++;
-                    if (count > 1200) break;
-                }
-
-                const roofTaniCount = Math.ceil((L + taniDim) / calcSize);
-                const roofYamaCount = Math.ceil(L / calcSize);
-
-                return { centerL, yamaDim, taniDim, taniZan, yamaZan, table, count, roofTaniCount, roofYamaCount, L };
-            }, [tfSize, tfTotalL]);
-
+            const shareCurrent=async()=>{
+                if(shareBusy.current)return;shareBusy.current=true;setSharing(true);
+                try{
+                    const text=textLines();if(!text){showToast('全長を入力してから共有してください');return;}
+                    if(typeof navigator.share==='function'&&window.isSecureContext){try{await navigator.share({title:`タイトフレーム ${isEdge?'片張り':'割付表'}`,text});return;}catch(e){if(e&&e.name==='AbortError')return;}}
+                    showToast(await copyText(text)?'割付をコピーしました':'共有できませんでした。画面の画像を送ってください');
+                }catch(_){showToast('共有できませんでした。画面の画像を送ってください');}
+                finally{shareBusy.current=false;setSharing(false);}
+            };
             return (
                 <div className="flex flex-col h-full bg-[#111113] text-zinc-100 overflow-hidden">
                     {/* トースト通知 */}
@@ -627,29 +686,20 @@
                         <div className="h-full w-full max-w-[1400px] mx-auto grid grid-cols-12 gap-3.5 lg:gap-4">
                             
                             {/* 左カラム: 入力・テンキー・断面図・サマリーカード (5 / 12) */}
-                            <div className="col-span-12 md:col-span-5 flex flex-col gap-3.5 overflow-y-auto pr-0.5 ipad-scroll">
+                            <div className="left-column col-span-12 md:col-span-5 flex flex-col gap-3.5 overflow-y-auto pr-0.5 ipad-scroll">
                                 
                                 {/* 入力 & テンキー カード */}
-                                <div className="ipad-card p-4 space-y-3">
-                                    {/* パラメーター選択 & 全長芯 */}
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <div>
-                                            <label className="text-xs text-zinc-400 font-bold mb-1.5 block">山ピッチ (タイプ)</label>
-                                            <select 
-                                                value={tfSize} 
-                                                onChange={(e) => setTfSize(e.target.value)} 
-                                                className="w-full bg-[#111113] border border-[#38383a] text-white rounded-xl px-3 py-2.5 text-sm font-semibold outline-none focus:border-[#0a84ff]"
-                                            >
-                                                <option value="600">600 (折板)</option>
-                                                <option value="500">500 (H150)</option>
-                                                <option value="1000">1000 (大型)</option>
+                                <div className="input-card ipad-card p-4 space-y-3">
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="parameter-box">
+                                            <label htmlFor="ipad-type" className="text-xs text-zinc-400 font-bold">タイプ</label>
+                                            <select id="ipad-type" value={tfSize} onChange={e=>setTfSize(e.target.value)} className="parameter-select text-sm font-semibold outline-none">
+                                                <option value="600">600 (折板)</option><option value="500">500 (H150)</option><option value="1000">1000 (大型)</option>
                                             </select>
                                         </div>
-                                        <div>
-                                            <label className="text-xs text-zinc-400 font-bold mb-1.5 block">全長芯 (自動計算)</label>
-                                            <div className="w-full bg-[#111113]/70 border border-[#2c2c2e] text-zinc-400 rounded-xl px-3 py-2.5 text-sm font-mono font-bold flex items-center justify-end">
-                                                {tfResults.centerL !== '' ? `${format(tfResults.centerL)} mm` : '-'}
-                                            </div>
+                                        <div className="parameter-box">
+                                            <span className="text-xs text-zinc-400 font-bold">芯寸法</span>
+                                            <span className="parameter-value text-sm font-mono font-bold text-orange-400">{tfResults.centerL!==''?`${format(tfResults.centerL)} mm`:'-'}</span>
                                         </div>
                                     </div>
 
@@ -657,15 +707,7 @@
                                     <div className="pt-1">
                                         <div className="flex justify-between items-center mb-1">
                                             <label className="text-xs text-zinc-400 font-bold">全長 (mm)</label>
-                                            {tfTotalL && (
-                                                <button 
-                                                    type="button" 
-                                                    onClick={handleBackspace} 
-                                                    className="text-xs text-zinc-400 hover:text-white px-2 py-0.5 rounded bg-zinc-800/80 active:bg-zinc-700 flex items-center gap-1 font-mono font-semibold"
-                                                >
-                                                    ⌫ 1字消去
-                                                </button>
-                                            )}
+                                            <button type="button" onClick={()=>setKeraba(v=>!v)} aria-pressed={keraba} className="keraba-inline text-xs font-mono font-semibold">{keraba?'ケラバON':'ケラバOFF'}</button>
                                         </div>
                                         <div className="w-full bg-[#111113] border-2 border-[#38383a] focus-within:border-orange-500 rounded-xl px-4 py-2.5 flex items-center justify-between">
                                             <span className="text-xs text-zinc-500 font-mono font-bold">LENGTH</span>
@@ -682,7 +724,7 @@
                                             {/* 1行目: 00 / 0 / クリア (各3列分) */}
                                             <button type="button" onClick={() => handleKeypadPress('00')} className="ipad-key col-span-3 text-xl">00</button>
                                             <button type="button" onClick={() => handleKeypadPress('0')} className="ipad-key col-span-3 text-xl">0</button>
-                                            <button type="button" onClick={() => handleKeypadPress('クリア')} className="ipad-key ipad-key-fn col-span-3" title="全クリア">クリア</button>
+                                            <button type="button" onClick={() => handleKeypadPress('クリア')} className="ipad-key ipad-key-fn col-span-3" title="全長をクリア">C</button>
 
                                             {/* 2行目: 1 〜 9 (各1列分) */}
                                             <button type="button" onClick={() => handleKeypadPress('1')} className="ipad-key col-span-1">1</button>
@@ -699,80 +741,61 @@
                                 </div>
 
                                 {/* 折板屋根 断面プロファイル表示 */}
-                                <div className="ipad-card p-3.5 flex flex-col items-center justify-center bg-[#111113] border border-white/10 select-none">
+                                <div className="profile-card ipad-card p-3.5 flex flex-col items-center justify-center bg-[#111113] border border-white/10 select-none">
                                     <RoofProfileSVG size={tfSize} />
                                 </div>
 
                                 {/* 端部基準 & 屋根材枚数カード */}
-                                <div className="grid grid-cols-2 gap-3 select-none">
+                                <div className="summary-cards grid grid-cols-2 gap-3 select-none">
                                     <div className="ipad-card p-3.5 border-l-4 border-l-[#0a84ff] bg-[#1c1c1e]">
                                         <span className="text-xs text-blue-400 font-bold block mb-1">谷芯 端部基準 (タイト)</span>
-                                        <div className="text-2xl font-mono font-bold text-white mb-1">
-                                            {tfResults.taniZan !== '' ? format(tfResults.taniZan) : '-'} <span className="text-xs font-normal text-zinc-400">mm</span>
+                                        <div className="text-[22px] font-mono font-bold text-white mb-1">
+                                            {tfResults.taniZan !== '' ? format(tfResults.taniZan) : '-'}
                                         </div>
-                                        <div className="text-xs text-zinc-400 font-mono">屋根材谷芯: <span className="text-blue-400 font-bold">{tfResults.roofTaniCount || '-'} 枚</span></div>
+                                        <div className="text-xs text-zinc-400 font-mono mb-1">通常タイト: <span className="text-blue-400 font-bold">{val(visible.tani,'frames')} 本</span></div>
+                                        <div className="text-xs text-zinc-400 font-mono">屋根材谷芯: <span className="text-blue-400 font-bold">{tfResults.roofTaniCount} 枚</span></div>
                                     </div>
                                     <div className="ipad-card p-3.5 border-l-4 border-l-[#30d158] bg-[#1c1c1e]">
                                         <span className="text-xs text-emerald-400 font-bold block mb-1">山芯 端部基準 (タイト)</span>
-                                        <div className="text-2xl font-mono font-bold text-white mb-1">
-                                            {tfResults.yamaZan !== '' ? format(tfResults.yamaZan) : '-'} <span className="text-xs font-normal text-zinc-400">mm</span>
+                                        <div className="text-[22px] font-mono font-bold text-white mb-1">
+                                            {tfResults.yamaZan !== '' ? format(tfResults.yamaZan) : '-'}
                                         </div>
-                                        <div className="text-xs text-zinc-400 font-mono">屋根材山芯: <span className="text-emerald-400 font-bold">{tfResults.roofYamaCount || '-'} 枚</span></div>
+                                        <div className="text-xs text-zinc-400 font-mono mb-1">通常タイト: <span className="text-emerald-400 font-bold">{val(visible.yama,'frames')} 本</span></div>
+                                        <div className="text-xs text-zinc-400 font-mono">屋根材山芯: <span className="text-emerald-400 font-bold">{tfResults.roofYamaCount} 枚</span></div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* 右カラム: タイトフレーム割付位置 墨出し表 (7 / 12) */}
                             <div className="col-span-12 md:col-span-7 ipad-card flex flex-col overflow-hidden h-full select-none">
-                                <div className="p-3 border-b border-white/10 flex justify-between items-center bg-[#252528] shrink-0">
-                                    <span className="text-sm font-bold text-zinc-200 tracking-wide flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-orange-400"></span>
-                                        タイトフレーム割付 墨出し表
-                                    </span>
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-xs font-mono font-bold text-zinc-300 bg-white/5 px-2.5 py-1 rounded-lg border border-white/10">
-                                            全長: <span className="text-orange-400 font-bold">{format(tfTotalL) || 0}</span> mm
-                                        </span>
-                                        <span className="text-xs font-mono font-bold text-zinc-300 bg-white/5 px-2.5 py-1 rounded-lg border border-white/10">
-                                            タイト合計: <span className="text-orange-400 font-black">{tfResults.count}</span> 本
-                                        </span>
+                                <div className="right-header shrink-0">
+                                    <div className="right-tabs" role="tablist" aria-label="割付表示">
+                                        <button type="button" role="tab" aria-selected={!isEdge} aria-controls="ipad-layout-panel" onClick={()=>setActiveTable('table')} className={!isEdge?'selected':''}>割付表</button>
+                                        <button type="button" role="tab" aria-selected={isEdge} aria-controls="ipad-layout-panel" onClick={()=>setActiveTable('edge')} className={isEdge?'selected':''}>片張り</button>
                                     </div>
+                                    <div className="length-share-row">
+                                        <span className="font-bold">全長: <span className="text-orange-400">{tfTotalL!==''?fmt(L):'-'}</span> mm</span>
+                                        <div className="header-actions">
+                                            {!isEdge&&<button type="button" onClick={()=>setKeraba(v=>!v)} aria-pressed={keraba} className="mode-button">{keraba?'ケラバあり':'割付表'}</button>}
+                                            <button type="button" onClick={shareCurrent} disabled={sharing} className="share-icon" aria-label="共有" title="共有"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 15V3m-4 4 4-4 4 4M7 10H5v11h14V10h-2"/></svg></button>
+                                        </div>
+                                    </div>
+                                    <div className="font-bold mt-2">タイプ {tfSize} mm / 屋根材 <span className="text-orange-400" title="谷芯割／山芯割の順">{roofText}</span> 枚</div>
+                                    {(isEdge||keraba)&&<select aria-label="ケラバの取り付け側" value={side} onChange={e=>setSide(e.target.value)} className="side-select mt-2"><option value="left">ケラバ：左端1本</option><option value="both">ケラバ：左右各1本</option></select>}
                                 </div>
-
-                                <div className="flex-1 ipad-scroll bg-[#171719]">
+                                <div id="ipad-layout-panel" role="tabpanel" className="flex-1 ipad-scroll bg-[#171719]" key={activeTable}>
                                     <table className="w-full text-center border-collapse">
-                                        <thead className="sticky top-0 bg-[#252528] border-b border-white/10 text-xs font-mono z-10 shadow-sm">
-                                            <tr>
-                                                <th className="py-3 px-3 text-zinc-400 font-bold w-16 border-r border-white/10">No.</th>
-                                                <th className="py-3 px-4 text-[#0a84ff] font-bold border-r border-white/10 text-base">谷芯 (mm)</th>
-                                                <th className="py-3 px-4 text-[#30d158] font-bold text-base">山芯 (mm)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="font-mono text-base divide-y divide-white/5">
-                                            {tfResults.table.length === 0 ? (
-                                                <tr>
-                                                    <td colSpan="3" className="py-36 text-center text-zinc-500 italic font-semibold">
-                                                        左側のテンキーで全長を入力してください
-                                                    </td>
-                                                </tr>
-                                            ) : (
-                                                tfResults.table.map((row, idx) => (
-                                                    <tr key={idx} className="active:bg-white/10 hover:bg-white/5 transition-colors">
-                                                        <td className="py-3 border-r border-white/5 text-zinc-400 font-bold text-sm bg-black/10">
-                                                            {idx + 1}
-                                                        </td>
-                                                        <td className="py-3 border-r border-white/5 text-[#60a5fa] font-bold text-lg">
-                                                            {row.tani !== null ? format(row.tani) : '-'}
-                                                        </td>
-                                                        <td className="py-3 text-[#4ade80] font-bold text-lg">
-                                                            {row.yama !== null ? format(row.yama) : '-'}
-                                                        </td>
-                                                    </tr>
-                                                ))
-                                            )}
+                                        <thead className="sticky top-0 bg-[#252528] border-b border-white/10 text-xs font-mono z-10 shadow-sm"><tr><th className="py-3 px-2 text-zinc-400 font-bold w-12 border-r border-white/10">本</th><th className="py-3 px-2 text-[#0a84ff] font-bold border-r border-white/10 text-base">{isEdge?'ケラバなし':'谷芯 (mm)'}</th><th className="py-3 px-2 text-[#30d158] font-bold text-base">{isEdge?'ケラバあり':'山芯 (mm)'}</th></tr></thead>
+                                        <tbody className="font-mono text-base">
+                                            {a.error&&b.error?<tr><td colSpan="3" className="py-12 px-3 text-zinc-400">{tfTotalL===''?'左側のテンキーで全長を入力してください':a.error}</td></tr>:<>
+                                                {(ka||kb)&&<tr className="keraba-divider-bottom"><td className="layout-cell text-zinc-400">左</td>{[[a,ka],[b,kb]].map(([r,on],i)=><td key={i} className={`layout-cell ${i===0?'text-blue-400':'text-emerald-400'}`}>{on&&!r.error&&r.left!=null?<><span className="text-sm">ケラバ 山芯</span><br/>{fmt(r.left)}</>:'-'}</td>)}</tr>}
+                                                {Array.from({length:Math.max(a.rows?.length||0,b.rows?.length||0)},(_,i)=><tr key={i}><td className="layout-cell text-zinc-400 text-sm">{i+1}</td><td className="layout-cell text-blue-400">{a.rows?.[i]?fmt(a.rows[i].start):'-'}</td><td className="layout-cell text-emerald-400">{b.rows?.[i]?fmt(b.rows[i].start):'-'}</td></tr>)}
+                                                {(ka||kb)&&side==='both'&&<tr className="keraba-divider-top"><td className="layout-cell text-zinc-400">右</td>{[[a,ka],[b,kb]].map(([r,on],i)=><td key={i} className={`layout-cell ${i===0?'text-blue-400':'text-emerald-400'}`}>{on&&!r.error&&r.right!=null?<><span className="text-sm">ケラバ 山芯</span><br/>{fmt(r.right)}</>:'-'}</td>)}</tr>}
+                                            </>}
                                         </tbody>
+                                        <tfoot className="bg-[#2c2c2e] border-t-2 border-[#48484a]"><tr><td className="border-r border-white/10"></td>{[[a,ka],[b,kb]].map(([r,on],i)=><td key={i} className="py-4 px-1 border-r border-white/10"><div className="text-sm text-zinc-400">本数合計 <span className="text-xl text-white font-bold">{val(r,'frames')}</span>本</div>{on&&<div className="text-sm text-zinc-400">ケラバ {r.error?'-':r.count}本（別）</div>}<div className="text-sm text-zinc-400 mt-1">端数合計 <span className="text-xl text-orange-400 font-bold">{frameRemainder(r)}</span>mm</div></td>)}</tr></tfoot>
                                     </table>
                                 </div>
+                                <p className="px-3 py-2 text-sm text-zinc-400 border-t border-white/10 shrink-0">{a.error||b.error||(isEdge?'左外端からの寸法。最初の屋根山芯は30mm。':'左切断端からの寸法。')}{!a.error&&!b.error&&' 通常タイトは谷芯、ケラバは山芯。本数は通常タイトのみ。'}</p>
                             </div>
 
                         </div>
@@ -786,30 +809,9 @@
     </script>
 
     <script>
-        // PWAのアップデート検知と自動リロード
         if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js?v=202610010600').then((registration) => {
-                    registration.onupdatefound = () => {
-                        const installingWorker = registration.installing;
-                        if (!installingWorker) return;
-                        installingWorker.onstatechange = () => {
-                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                // 新しいバージョンがインストールされたら古いSWを強制スキップ
-                                installingWorker.postMessage({ type: 'SKIP_WAITING' });
-                            }
-                        };
-                    };
-                }).catch((err) => console.log('SW Registration failed: ', err));
-                
-                // コントローラーが切り替わった（新しいバージョンがアクティブになった）ら自動リロード
-                let refreshing = false;
-                navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    if (!refreshing) {
-                        window.location.reload();
-                        refreshing = true;
-                    }
-                });
+                navigator.serviceWorker.register('./sw.js', { updateViaCache:'none' }).then(registration => registration.update()).catch(() => {});
             });
         }
     </script>

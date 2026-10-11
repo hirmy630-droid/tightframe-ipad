@@ -1,7 +1,7 @@
 {
   "name": "屋根タイトフレーム割付計算",
   "short_name": "タイト割付",
-  "start_url": "./",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#111113",
@@ -26,5 +26,6 @@
       "type": "image/png",
       "purpose": "any"
     }
-  ]
+  ],
+  "id": "./"
 }
